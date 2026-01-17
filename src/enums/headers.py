@@ -8,5 +8,6 @@ load_dotenv()
 class Headers(Enum):
     HEADERS = {
         "accept": "application/json",
+        "Content-Type": "application/json",
         "Authorization": os.getenv("CLICKUP_API_KEY")
     }

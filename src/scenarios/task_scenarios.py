@@ -9,9 +9,9 @@ class TaskScenarios:
         """
         Сценарий: получить task и проверить, что ответ не пуст.
         """
-        task = self.api_client.get_task().json()
+        task = self.api_client.get_task("86c7f4v8a").json()
 
-        # TODO: assert len(bookings) > 0, "Список bookings пуст"
-        # TODO: print(f"Получено {len(bookings)} bookings id.")
+        assert task, "Ответ task пуст"
+        print(f"Получена информация о task с id '86c7f4v8a'.")
 
         return task
