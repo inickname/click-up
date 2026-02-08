@@ -15,6 +15,7 @@ class TaskScenarios:
         """
         task_data = task_data().model_dump()
         created_task_data = self.api_client.create_task(task_data, list_id)
+
         task_id = created_task_data.json().get("id")
         assert task_id is not None, f"ID не найден в ответе на создание: {created_task_data}"
 
@@ -34,11 +35,17 @@ class TaskScenarios:
         assert task, "Ответ task пуст"
         print(f"Получена информация о task с id '86c7f4v8a'.")
 
-        return task
+        return task_id
 
     def create_task_negative(self, list_id, invalid_payload, expected_status_code):
         """
         Сценарий: создать task с разными наборами невалидных данных,
         чтобы убедиться, что система правильно обрабатывает ошибки.
         """
-        response = self.api_client.create_task(list_id, invalid_payload, expected_status_code)
+        response = self.api_client.create_task(invalid_payload, expected_status_code, list_id)
+
+        assert response.status_code == expected_status_code, (f"Ожидался {expected_status_code} статус-код, "
+                                                              f"получен {response.status_code}")
+        response_error = response.json().get("err")
+        assert response_error == "Task name invalid", f"Ошибка ответа: {response_error}"
+        return response_error
