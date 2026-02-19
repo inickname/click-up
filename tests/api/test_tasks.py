@@ -30,6 +30,14 @@ class TestTasks:
         task_scenarios = TaskScenarios(task_api_client)
         task_scenarios.update_task_and_check(delete_manager, task_data, list_id)
 
+    def test_delete_existing_task_and_verify(self, auth_session, task_data, list_id="901519603511"):
+        """
+        Сценарий: создать и удалить task.
+        """
+        task_api_client = TaskApiClient(auth_session)
+        task_scenarios = TaskScenarios(task_api_client)
+        task_scenarios.delete_existing_task_and_verify(task_data, list_id)
+
     @pytest.mark.parametrize("invalid_task_data, expected_status_code", [
         ({'name': ''}, 400),
         ({"name": None}, 400),

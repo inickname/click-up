@@ -61,6 +61,18 @@ class TaskScenarios:
         delete_manager.append(task_id)
         return task_id
 
+    def delete_existing_task_and_verify(self, task_data, list_id):
+        """
+        Сценарий: создать и удалить task.
+        Возвращает статус-код.
+        """
+        task_data = task_data().model_dump()
+        task_id = self.api_client.create_task(task_data, list_id).json().get("id")
+
+        deleted_task_data = self.api_client.delete_task(task_id)
+        print(f"Task с ID {task_id} отправлен на удаление.")
+        return deleted_task_data.status_code
+
     def create_task_negative(self, list_id, invalid_task_data, expected_status_code):
         """
         Сценарий: создать task с разными наборами невалидных данных,

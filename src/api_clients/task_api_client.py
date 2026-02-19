@@ -28,10 +28,10 @@ class TaskApiClient:
             response.raise_for_status()
         return response
 
-    def delete_task(self, task_id):
+    def delete_task(self, task_id, expected_status_code=204):
         """Отправляет запрос на удаление task."""
         response = self.auth_session.delete(f"{self.base_url}/api/v2/task/{task_id}")
-        if response.status_code != 204:  # В REST API для DELETE часто возвращают 204 No Content или 200 OK
+        if response.status_code != expected_status_code:  # В REST API для DELETE часто возвращают 204 No Content или 200 OK
             response.raise_for_status()
         # Для DELETE часто нечего возвращать из тела, либо можно вернуть статус-код или сам response
         return response  # или response.status_code
