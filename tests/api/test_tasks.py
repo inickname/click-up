@@ -54,3 +54,17 @@ class TestTasks:
         task_api_client = TaskApiClient(auth_session)
         task_scenarios = TaskScenarios(task_api_client)
         task_scenarios.create_task_negative(invalid_task_data, list_id, expected_status_code)
+
+    @pytest.mark.parametrize("invalid_task_data, expected_status_code", [
+        ({'name': 1}, 400)
+    ])
+    def test_update_task_negative(self, auth_session, delete_manager, task_data, invalid_task_data,
+                                  expected_status_code, list_id=list_ID):
+        """
+        Сценарий: создать task, отправить запрос на изменение task,
+        используя разные невалидных данных, чтобы убедиться,
+        что система правильно обрабатывает ошибки.
+        """
+        task_api_client = TaskApiClient(auth_session)
+        task_scenarios = TaskScenarios(task_api_client)
+        task_scenarios.update_task_negative(delete_manager, task_data, invalid_task_data, list_id, expected_status_code)

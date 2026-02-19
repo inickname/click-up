@@ -86,3 +86,22 @@ class TaskScenarios:
         response_error = response.json().get("err")
         assert response_error == "Task name invalid", f"Ошибка ответа: {response_error}"
         return response_error
+
+    def update_task_negative(self, delete_manager, task_data, invalid_task_data, list_id, expected_status_code):
+        """
+        Сценарий: создать task, отправить запрос на изменение task,
+        используя разные невалидных данных, чтобы убедиться,
+        что система правильно обрабатывает ошибки.
+        """
+        task_data = task_data().model_dump()
+        task_id = self.api_client.create_task(task_data, list_id).json().get("id")
+
+        response = self.api_client.update_task(task_id, invalid_task_data, expected_status_code)
+
+        assert response.status_code == expected_status_code, (f"Ожидался {expected_status_code} статус-код, "
+                                                              f"получен {response.status_code}")
+        response_error = response.json().get("err")
+        assert response_error == "Task name invalid", f"Ошибка ответа: {response_error}"
+
+        delete_manager.append(task_id)
+        return response_error
