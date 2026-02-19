@@ -6,7 +6,9 @@ from tests.conftest import delete_manager
 
 
 class TestTasks:
-    def test_create_task_and_check(self, auth_session, delete_manager, task_data, list_id="901519603511"):
+    list_ID = "901519603511"
+
+    def test_create_task_and_check(self, auth_session, delete_manager, task_data, list_id=list_ID):
         """
         Сценарий: создать и проверить task.
         """
@@ -14,7 +16,7 @@ class TestTasks:
         task_scenarios = TaskScenarios(task_api_client)
         task_scenarios.create_task_and_check(delete_manager, task_data, list_id)
 
-    def test_get_and_verify_task_exist(self, auth_session, delete_manager, task_data, list_id="901519603511"):
+    def test_get_and_verify_task_exist(self, auth_session, delete_manager, task_data, list_id=list_ID):
         """
         Сценарий: получить task и проверить, что ответ не пуст.
         """
@@ -22,7 +24,7 @@ class TestTasks:
         task_scenarios = TaskScenarios(task_api_client)
         task_scenarios.get_and_verify_task_exist(delete_manager, task_data, list_id)
 
-    def test_update_task_and_verify_changes(self, auth_session, delete_manager, task_data, list_id="901519603511"):
+    def test_update_task_and_verify_changes(self, auth_session, delete_manager, task_data, list_id=list_ID):
         """
         Сценарий: создать, изменить и проверить task.
         """
@@ -30,7 +32,7 @@ class TestTasks:
         task_scenarios = TaskScenarios(task_api_client)
         task_scenarios.update_task_and_check(delete_manager, task_data, list_id)
 
-    def test_delete_existing_task_and_verify(self, auth_session, task_data, list_id="901519603511"):
+    def test_delete_existing_task_and_verify(self, auth_session, task_data, list_id=list_ID):
         """
         Сценарий: создать и удалить task.
         """
@@ -44,7 +46,7 @@ class TestTasks:
         ({"name": 0}, 400),
         ({"description": "Description"}, 400)
     ])
-    def test_create_task_negative(self, auth_session, invalid_task_data, expected_status_code, list_id="901519603511"):
+    def test_create_task_negative(self, auth_session, invalid_task_data, expected_status_code, list_id=list_ID):
         """
         Сценарий: создать task с разными наборами невалидных данных,
         чтобы убедиться, что система правильно обрабатывает ошибки.
