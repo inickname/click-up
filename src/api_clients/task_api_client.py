@@ -21,6 +21,13 @@ class TaskApiClient:
             response.raise_for_status()
         return response
 
+    def update_task(self, task_id, task_data, expected_status_code=200):
+        # Отправляет запрос на изменение task.
+        response = self.auth_session.put(f"{self.base_url}/api/v2/task/{task_id}", json=task_data)
+        if response.status_code != expected_status_code:
+            response.raise_for_status()
+        return response
+
     def delete_task(self, task_id):
         """Отправляет запрос на удаление task."""
         response = self.auth_session.delete(f"{self.base_url}/api/v2/task/{task_id}")

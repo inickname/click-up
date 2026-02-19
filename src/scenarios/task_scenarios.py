@@ -40,6 +40,27 @@ class TaskScenarios:
 
         return task_id
 
+    def update_task_and_check(self, delete_manager, task_data, list_id):
+        """
+        Сценарий: создать, изменить и проверить task.
+        Возвращает ID измененного task.
+        """
+        task_data_1 = task_data().model_dump()
+        task_data_2 = task_data().model_dump()
+        task_id = self.api_client.create_task(task_data_1, list_id).json().get("id")
+
+        updated_task_data = self.api_client.update_task(task_id, task_data_2)
+
+        task_id = updated_task_data.json().get("id")
+        assert task_id is not None, f"ID не найден в ответе на изменение: {updated_task_data}"
+
+        ValidateTaskResponse.validate_response(updated_task_data, TaskResponseModel, 200,
+                                               task_data_2)
+
+        print(f"Task с ID {task_id} успешно изменен.")
+        delete_manager.append(task_id)
+        return task_id
+
     def create_task_negative(self, list_id, invalid_task_data, expected_status_code):
         """
         Сценарий: создать task с разными наборами невалидных данных,
