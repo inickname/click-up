@@ -33,11 +33,12 @@ class TaskScenarios:
         task_data = task_data().model_dump()
         task_id = self.api_client.create_task(task_data, list_id).json().get("id")
 
-        task = self.api_client.get_task(task_id).json()
+        gotten_task_data = self.api_client.get_task(task_id)
+        assert gotten_task_data.json(), "Ответ task пуст"
 
-        assert task, "Ответ task пуст"
+        ValidateTaskResponse.validate_response(gotten_task_data, TaskResponseModel, 200, task_data)
         print(f"Получена информация о task с id {task_id}.")
-
+        delete_manager.append(task_id)
         return task_id
 
     def update_task_and_check(self, delete_manager, task_data, list_id):
